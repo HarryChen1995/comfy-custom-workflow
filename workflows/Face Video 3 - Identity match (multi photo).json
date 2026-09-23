@@ -1,0 +1,1212 @@
+{
+  "last_node_id": 22,
+  "last_link_id": 41,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadVideo",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        280,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadVideo"
+      },
+      "widgets_values": [
+        "jax.mp4"
+      ],
+      "title": "TARGET video"
+    },
+    {
+      "id": 2,
+      "type": "GetVideoComponents",
+      "pos": [
+        350,
+        40
+      ],
+      "size": [
+        270,
+        130
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            2,
+            3,
+            20
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            30
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "links": [
+            31
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "bit_depth",
+          "type": "COMBO",
+          "links": null,
+          "slot_index": 3
+        },
+        {
+          "name": "color_space",
+          "type": "COMBO",
+          "links": null,
+          "slot_index": 4
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GetVideoComponents"
+      },
+      "widgets_values": [],
+      "title": "frames + audio + fps"
+    },
+    {
+      "id": 3,
+      "type": "LoadImage",
+      "pos": [
+        40,
+        350
+      ],
+      "size": [
+        270,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "PHOTO 0"
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [
+        40,
+        680
+      ],
+      "size": [
+        270,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "PHOTO 1"
+    },
+    {
+      "id": 5,
+      "type": "SourcePhotoSet",
+      "pos": [
+        340,
+        350
+      ],
+      "size": [
+        280,
+        160
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10
+        },
+        {
+          "name": "append_to",
+          "type": "SOURCE_SET",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source_set",
+          "type": "SOURCE_SET",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "sheet",
+          "type": "IMAGE",
+          "links": null,
+          "slot_index": 1
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SourcePhotoSet"
+      },
+      "widgets_values": [
+        "me",
+        0,
+        "large-small",
+        640
+      ],
+      "title": "photo 0"
+    },
+    {
+      "id": 6,
+      "type": "SourcePhotoSet",
+      "pos": [
+        340,
+        680
+      ],
+      "size": [
+        280,
+        160
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "append_to",
+          "type": "SOURCE_SET",
+          "link": 12,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source_set",
+          "type": "SOURCE_SET",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "sheet",
+          "type": "IMAGE",
+          "links": [
+            14
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": [
+            15
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SourcePhotoSet"
+      },
+      "widgets_values": [
+        "friend",
+        0,
+        "large-small",
+        640
+      ],
+      "title": "photo 1"
+    },
+    {
+      "id": 7,
+      "type": "PreviewImage",
+      "pos": [
+        650,
+        680
+      ],
+      "size": [
+        360,
+        320
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "title": "YOUR PHOTOS - numbered"
+    },
+    {
+      "id": 8,
+      "type": "PreviewAny",
+      "pos": [
+        650,
+        1030
+      ],
+      "size": [
+        360,
+        120
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 15
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [],
+      "title": "photo list"
+    },
+    {
+      "id": 9,
+      "type": "ImageFromBatch",
+      "pos": [
+        660,
+        40
+      ],
+      "size": [
+        260,
+        105
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ],
+      "title": "PERSON A ref frame"
+    },
+    {
+      "id": 10,
+      "type": "FaceIdentityReference",
+      "pos": [
+        950,
+        40
+      ],
+      "size": [
+        280,
+        130
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 4
+        },
+        {
+          "name": "append_to",
+          "type": "FACE_IDENTITY",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "identity",
+          "type": "FACE_IDENTITY",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "preview",
+          "type": "IMAGE",
+          "links": [
+            40
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FaceIdentityReference"
+      },
+      "widgets_values": [
+        0,
+        "large-small",
+        640
+      ],
+      "title": "A: lock on"
+    },
+    {
+      "id": 11,
+      "type": "PreviewImage",
+      "pos": [
+        1250,
+        40
+      ],
+      "size": [
+        230,
+        210
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 40
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "title": "A"
+    },
+    {
+      "id": 12,
+      "type": "ImageFromBatch",
+      "pos": [
+        660,
+        190
+      ],
+      "size": [
+        260,
+        105
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch"
+      },
+      "widgets_values": [
+        200,
+        1
+      ],
+      "title": "PERSON B ref frame"
+    },
+    {
+      "id": 13,
+      "type": "FaceIdentityReference",
+      "pos": [
+        950,
+        200
+      ],
+      "size": [
+        280,
+        130
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 6
+        },
+        {
+          "name": "append_to",
+          "type": "FACE_IDENTITY",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "identity",
+          "type": "FACE_IDENTITY",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "preview",
+          "type": "IMAGE",
+          "links": [
+            41
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FaceIdentityReference"
+      },
+      "widgets_values": [
+        0,
+        "large-small",
+        640
+      ],
+      "title": "B: lock on"
+    },
+    {
+      "id": 14,
+      "type": "PreviewImage",
+      "pos": [
+        1250,
+        270
+      ],
+      "size": [
+        230,
+        210
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 41
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "title": "B"
+    },
+    {
+      "id": 15,
+      "type": "FaceIdentityPair",
+      "pos": [
+        1500,
+        40
+      ],
+      "size": [
+        290,
+        150
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "FACE_IDENTITY",
+          "link": 5
+        },
+        {
+          "name": "append_to",
+          "type": "FACE_PAIRS",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pairs",
+          "type": "FACE_PAIRS",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FaceIdentityPair"
+      },
+      "widgets_values": [
+        0,
+        "person A"
+      ],
+      "title": "person A  <-  photo 0"
+    },
+    {
+      "id": 16,
+      "type": "FaceIdentityPair",
+      "pos": [
+        1500,
+        230
+      ],
+      "size": [
+        290,
+        150
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "identity",
+          "type": "FACE_IDENTITY",
+          "link": 7
+        },
+        {
+          "name": "append_to",
+          "type": "FACE_PAIRS",
+          "link": 8,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pairs",
+          "type": "FACE_PAIRS",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": [
+            16
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FaceIdentityPair"
+      },
+      "widgets_values": [
+        1,
+        "person B"
+      ],
+      "title": "person B  <-  photo 1"
+    },
+    {
+      "id": 17,
+      "type": "PreviewAny",
+      "pos": [
+        1500,
+        420
+      ],
+      "size": [
+        290,
+        130
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 16
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [],
+      "title": "pair list"
+    },
+    {
+      "id": 18,
+      "type": "FaceIdentityMultiSwap",
+      "pos": [
+        1830,
+        40
+      ],
+      "size": [
+        330,
+        200
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 20
+        },
+        {
+          "name": "source_set",
+          "type": "SOURCE_SET",
+          "link": 13
+        },
+        {
+          "name": "pairs",
+          "type": "FACE_PAIRS",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            32
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": [
+            33
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "score_plot",
+          "type": "IMAGE",
+          "links": [
+            34
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FaceIdentityMultiSwap"
+      },
+      "widgets_values": [
+        0.3,
+        640,
+        "inswapper_128.onnx"
+      ],
+      "title": "Swap every person"
+    },
+    {
+      "id": 19,
+      "type": "PreviewAny",
+      "pos": [
+        1830,
+        270
+      ],
+      "size": [
+        330,
+        160
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 33
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [],
+      "title": "swap report"
+    },
+    {
+      "id": 20,
+      "type": "PreviewImage",
+      "pos": [
+        1830,
+        460
+      ],
+      "size": [
+        460,
+        250
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 34
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "title": "score plot - one line per person"
+    },
+    {
+      "id": 21,
+      "type": "CreateVideo",
+      "pos": [
+        2200,
+        40
+      ],
+      "size": [
+        300,
+        170
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 32
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "link": 31,
+          "widget": {
+            "name": "fps"
+          }
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 30,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            35
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        30.0,
+        "auto",
+        "sRGB",
+        "none"
+      ],
+      "title": "Rebuild - fps + audio"
+    },
+    {
+      "id": 22,
+      "type": "SaveVideo",
+      "pos": [
+        2200,
+        250
+      ],
+      "size": [
+        300,
+        180
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 35
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveVideo"
+      },
+      "widgets_values": [
+        "video/multi_photo_identity",
+        "auto",
+        "auto"
+      ],
+      "title": "Save"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "VIDEO"
+    ],
+    [
+      2,
+      2,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      2,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      10,
+      0,
+      15,
+      0,
+      "FACE_IDENTITY"
+    ],
+    [
+      6,
+      12,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      13,
+      0,
+      16,
+      0,
+      "FACE_IDENTITY"
+    ],
+    [
+      8,
+      15,
+      0,
+      16,
+      1,
+      "FACE_PAIRS"
+    ],
+    [
+      9,
+      16,
+      0,
+      18,
+      2,
+      "FACE_PAIRS"
+    ],
+    [
+      10,
+      3,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      4,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      5,
+      0,
+      6,
+      1,
+      "SOURCE_SET"
+    ],
+    [
+      13,
+      6,
+      0,
+      18,
+      1,
+      "SOURCE_SET"
+    ],
+    [
+      14,
+      6,
+      1,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      6,
+      2,
+      8,
+      0,
+      "STRING"
+    ],
+    [
+      16,
+      16,
+      1,
+      17,
+      0,
+      "STRING"
+    ],
+    [
+      20,
+      2,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      30,
+      2,
+      1,
+      21,
+      2,
+      "AUDIO"
+    ],
+    [
+      31,
+      2,
+      2,
+      21,
+      1,
+      "FLOAT"
+    ],
+    [
+      32,
+      18,
+      0,
+      21,
+      0,
+      "IMAGE"
+    ],
+    [
+      33,
+      18,
+      1,
+      19,
+      0,
+      "STRING"
+    ],
+    [
+      34,
+      18,
+      2,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      35,
+      21,
+      0,
+      22,
+      0,
+      "VIDEO"
+    ],
+    [
+      40,
+      10,
+      1,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      41,
+      13,
+      1,
+      14,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "ONE PHOTO PER PERSON",
+      "bounding": [
+        20,
+        300,
+        1000,
+        880
+      ],
+      "color": "#3f789e",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "WHO IS WHO IN THE VIDEO",
+      "bounding": [
+        640,
+        -40,
+        860,
+        540
+      ],
+      "color": "#a1309b",
+      "font_size": 22,
+      "flags": {}
+    },
+    {
+      "title": "BIND + SWAP + REBUILD",
+      "bounding": [
+        1480,
+        -40,
+        1060,
+        780
+      ],
+      "color": "#3f789e",
+      "font_size": 22,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

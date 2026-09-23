@@ -1,0 +1,33 @@
+# Dependencies for the custom nodes in this repo.
+# Install into the SAME Python environment ComfyUI runs in:
+#
+#   C:\ComfyUI\venv\Scripts\python.exe -m pip install -r requirements.txt
+#
+# torch / torchvision are intentionally NOT pinned here - install them first,
+# matching your CUDA version, from https://pytorch.org . Tested with
+# torch 2.14.0+cu126 on an RTX 2060 (driver 561.17).
+
+# ---- ONNX runtime ----------------------------------------------------------
+# IMPORTANT: onnxruntime-gpu must match your CUDA major version.
+#   1.22.x  -> CUDA 12  (needs NVIDIA driver >= 525)
+#   1.23+   -> CUDA 13  (needs NVIDIA driver >= 580)
+# Installing a CUDA-13 build on a CUDA-12 driver does NOT error - it silently
+# falls back to CPU and face swapping runs ~20x slower. See README "GPU check".
+onnxruntime-gpu==1.22.0
+onnx>=1.17
+
+# ---- face detection / recognition / OCR ------------------------------------
+easyocr>=1.7.1            # text detection for the Text workflows
+scikit-image>=0.22        # easyocr dependency
+shapely>=2.0              # easyocr dependency
+
+# ---- imaging ---------------------------------------------------------------
+opencv-python>=4.9
+numpy>=1.26
+pillow>=10.0
+
+# ---- required by the ComfyUI-ReActor node ----------------------------------
+ultralytics>=8.3
+albumentations>=1.4.16
+segment-anything>=1.0
+importlib_metadata>=7.0   # ReActor's installer needs this on setuptools >= 81

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.part
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+workflows/sdxlturbo.json
