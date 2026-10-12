@@ -1,7 +1,8 @@
 # comfy-custom-workflow
 
 Custom ComfyUI nodes and workflows for **face swapping** (images and video, with
-manual or identity-based mapping) and **text removal / replacement** in images.
+manual or identity-based mapping), **text removal / replacement** in images, and
+**Stable Diffusion 3.5 Large** generation from text or from an input image.
 
 Everything here runs locally. Built and tested on a 6 GB GPU.
 
@@ -13,7 +14,7 @@ Everything here runs locally. Built and tested on a 6 GB GPU.
 custom_nodes/
   comfyui-face-tools/     8 nodes - face detection, mapping, identity matching
   comfyui-text-tools/     6 nodes - OCR text detection, erase, retype
-workflows/                11 ready-to-run workflows
+workflows/                13 ready-to-run workflows
 tools/
   download_models.py      fetches every model needed
   validate_workflows.py   checks workflows against a running ComfyUI
@@ -70,6 +71,16 @@ print(s.get_providers())"
 Must print `['CUDAExecutionProvider', ...]`. If it says `CPUExecutionProvider`,
 install the build matching your driver (`pip install onnxruntime-gpu==1.22.0`).
 `import torch` first - it loads the CUDA/cuDNN DLLs onnxruntime then reuses.
+
+On Python 3.14 there is no `onnxruntime-gpu==1.22.0` wheel. Use the CUDA 12 build
+of a newer release from Microsoft's feed instead (tested: 1.24.4 on a P100):
+
+```bash
+pip install onnxruntime-gpu==1.24.4 \
+  --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/
+```
+
+The default PyPI builds of 1.23+ are CUDA 13, which dropped Pascal GPUs (P100).
 
 ---
 
@@ -180,6 +191,7 @@ python tools/download_models.py
 ```
 python tools/download_models.py --list        # show the list, download nothing
 python tools/download_models.py --skip sd     # skip the 6.5 GB SDXL checkpoint
+python tools/download_models.py --skip sd35   # skip the 21.7 GB SD 3.5 Large set
 python tools/download_models.py --comfy D:\AI\ComfyUI    # if auto-detect fails
 ```
 
@@ -191,9 +203,21 @@ Already-present files are skipped by byte count; interrupted downloads resume.
 | `GFPGANv1.4.pth` | 332 MB | `models/facerestore_models/` | face restore |
 | `big-lama.pt` | 196 MB | `models/inpaint/` | text erase |
 | `sd_xl_turbo_1.0_fp16.safetensors` | 6.5 GB | `models/checkpoints/` | text-to-image only |
+| `sd3.5_large_fp8_scaled.safetensors` | 14.9 GB | `models/checkpoints/` | SD 3.5 workflows |
+| `clip_l.safetensors` | 246 MB | `models/text_encoders/` | SD 3.5 workflows |
+| `clip_g.safetensors` | 1.4 GB | `models/text_encoders/` | SD 3.5 workflows |
+| `t5xxl_fp8_e4m3fn_scaled.safetensors` | 5.2 GB | `models/text_encoders/` | SD 3.5 workflows |
 
-`buffalo_l` (face detection + ArcFace) and the EasyOCR models download
-themselves on first use.
+`buffalo_l` (face detection + ArcFace), the EasyOCR models, and ReActor's
+GFPGAN helpers (`detection_Resnet50_Final.pth`, `parsing_parsenet.pth`) and NSFW
+check download themselves on first use - the first face-swap run pauses while
+they arrive (~0.6 GB).
+
+The SD 3.5 files come from the ungated
+[Comfy-Org/stable-diffusion-3.5-fp8](https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8)
+mirror. The official `stabilityai/stable-diffusion-3.5-large` repo is gated and
+needs an accepted licence plus a Hugging Face token. SD 3.5 is released under the
+Stability AI Community License.
 
 ### 7. Restart ComfyUI
 
@@ -218,6 +242,10 @@ widget counts, values of the wrong type. Should print `ALL CLEAN`.
 flowchart TD
     A[What are you editing?] --> B[Text in an image]
     A --> C[Faces]
+    A --> G[Generate a new image]
+    G --> G1{Start from}
+    G1 -->|Text only| G2["SD35 1"]
+    G1 -->|An input image| G3["SD35 2"]
     B --> B1{Erase it, or replace it?}
     B1 -->|Erase| B2["Text 1 / Text 2"]
     B1 -->|Replace| B3["Text 3 / Text 4"]
@@ -499,6 +527,42 @@ detected.
 
 ---
 
+### SD35 1 - Text to image
+
+Stable Diffusion 3.5 Large from a text prompt. No custom nodes - stock ComfyUI.
+
+```mermaid
+flowchart LR
+    C[Load Checkpoint<br/>sd3.5_large_fp8_scaled] --> K[KSampler]
+    T[TripleCLIPLoader<br/>clip_l + clip_g + t5xxl] --> P[Positive / Negative prompt]
+    P --> K
+    E[EmptySD3LatentImage<br/>1024x1024] --> K
+    K --> D[VAE Decode] --> O[SaveImage]
+```
+
+Defaults: 28 steps, cfg 4.5, `euler` / `sgm_uniform`, 1024x1024.
+
+---
+
+### SD35 2 - Image to image
+
+Same model, but starts from an uploaded image instead of an empty latent. The
+prompt still steers the result.
+
+```mermaid
+flowchart LR
+    I[LoadImage] --> S[Scale To Total Pixels<br/>1 MP] --> V[VAE Encode]
+    V --> K[KSampler<br/>denoise 0.65]
+    P[Positive / Negative prompt] --> K
+    K --> D[VAE Decode] --> O[SaveImage]
+```
+
+`denoise` decides how far the result drifts: lower stays close to the input
+image, higher follows the prompt more. The input is scaled to about 1 MP so large
+photos don't run out of memory.
+
+---
+
 ## Node reference
 
 ### comfyui-face-tools
@@ -541,6 +605,15 @@ Measured on the RTX 2060, 6 GB, after the onnxruntime fix.
 | Identity swap, 360x360, 519 frames | **0.9 min** total (0.10 s/frame) |
 | LaMa text erase, 5250x7462 (39 MP) | 12 s |
 | SDXL Turbo 512x512, 4 steps | 8 s warm |
+
+Measured on a Tesla P100 16 GB (Linux, 22 GB RAM, torch 2.14.1+cu126). The P100
+has no tensor cores and no bf16/fp8 hardware, so SD 3.5 weights are upcast as they
+run; output is clean fp16, just slow.
+
+| Task | Result |
+|---|---|
+| SD35 1 - Text to image, 1024x1024, 28 steps | **421 s** first run (includes model load) |
+| SD35 2 - Image to image, ~1 MP, 28 steps, denoise 0.65 | **325 s** (models already loaded) |
 
 Identity matching is faster than index matching on real footage because frames
 below threshold skip the swap and the restore entirely - on a montage clip that

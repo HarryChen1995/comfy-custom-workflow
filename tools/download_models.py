@@ -38,6 +38,19 @@ MODELS = [
          size=6938081905,
          note="SDXL Turbo - only for plain text-to-image, not needed by the "
               "face or text workflows. Skip with --skip sd."),
+    dict(group="sd35", name="sd3.5_large_fp8_scaled.safetensors", sub="checkpoints",
+         url="https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/sd3.5_large_fp8_scaled.safetensors",
+         size=14934922866,
+         note="SD 3.5 Large, fp8 scaled, no text encoders. Stability AI Community License. Skip with --skip sd35."),
+    dict(group="sd35", name="clip_l.safetensors", sub="text_encoders",
+         url="https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_l.safetensors",
+         size=246144152, note="SD3.5 text encoder."),
+    dict(group="sd35", name="clip_g.safetensors", sub="text_encoders",
+         url="https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_g.safetensors",
+         size=1389382176, note="SD3.5 text encoder."),
+    dict(group="sd35", name="t5xxl_fp8_e4m3fn_scaled.safetensors", sub="text_encoders",
+         url="https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/t5xxl_fp8_e4m3fn_scaled.safetensors",
+         size=5157348688, note="SD3.5 text encoder."),
 ]
 
 AUTO = """
@@ -124,7 +137,7 @@ def main():
     ap.add_argument("--comfy", help="path to ComfyUI (only if auto-detect fails)")
     ap.add_argument("--skip", action="append", default=[],
                     choices=sorted({m["group"] for m in MODELS}),
-                    help="skip a group: face, text, sd  (repeatable)")
+                    help="skip a group: face, text, sd, sd35  (repeatable)")
     ap.add_argument("--list", action="store_true", help="show the list and exit")
     a = ap.parse_args()
 
